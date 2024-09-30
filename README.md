@@ -3,22 +3,30 @@ Curso de Econometría (septiembre - diciembre 2024), UPB
 
 # Temario
 # UNIDAD I: Fundamentos de Econometría.
-#1.1 Estadística y Algebra Lineal elemental: una revisión
+1.1 Estadística y Algebra Lineal elemental: una revisión
 
 1.2 Introducción al Modelo de Regresión
+
 1.3 El  Modelo de Regresión de Dos Variables
+
 1.4 El Modelo de Regresión Múltiple
+
 1.5 Uso de software econometrícos 
 
 # UNIDAD 2: Modelos econométricos causales
 2.1 Correlación Serial y Heterocedasticidad
+
 2.2 Variables Instrumentales y Especificación del Modelo
+
 2.3 Pronóstico con un Modelo de una sola Ecuación
+
 2.4 Modelos de Elección Binaria
 
 # UNIDAD 3: Análisis de series de tiempo
 3.1 Introducción al Análisis de Series de Tiempo
+
 3.2 Pronóstico con Series de Tiempo
+
 3.3 Caso práctico:  Enfoque financiero (Modelo econometríco o series de tiempo) 
 
 
