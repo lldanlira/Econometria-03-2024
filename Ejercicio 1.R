@@ -1,0 +1,26 @@
+#Ejercicio 1
+#Metodología 1
+
+TestScore <- c(680, 640, 670, 660, 630, 660, 635)
+TestScore
+str <- c(15, 17, 19, 20, 22, 23.5, 25)
+str
+
+#Generar gráfica de los datos 
+plot(TestScore ~ str)
+
+#Crear una linea de terndencia
+abline(a=713, b=-3)
+
+#Crear Modelo de Regresión Lineal
+mdrl <- lm(TestScore ~ str)
+help(lm)
+mdrl
+
+#Volviendo a crear la linea de tendencioa
+plot(TestScore ~ str)
+abline(a=713.568, b=-2.96)
+
+#Funcion summary
+help("summary")
+summary(mdrl)
