@@ -1,1 +1,9 @@
-
+# Create sample data
+IPC <- c(13, 14.5, 12.7, 14.5, 12.5, 14.9, 15, 12.8)
+PDJ <- c(560, 600, 610, 580, 700, 550, 510, 700)
+# create a scatterplot of the data
+plot(IPC ~ PDJ)
+  
+modelo_linear <- lm(IPC ~ PDJ)
+summary(modelo_linear)
+abline(a=20.826042, b=-0.011790)
