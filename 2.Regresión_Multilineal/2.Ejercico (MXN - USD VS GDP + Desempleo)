@@ -1,0 +1,53 @@
+install.packages("WDI")
+library(WDI)
+
+#Cargar datos del tipo de cambio
+tipo_cambio <-WDI(indicator = "PA.NUS.FCRF", 
+                  country = "MX",
+                  start = 1995, 
+                  end = 2023)
+View(tipo_cambio)
+plot(tipo_cambio$year, tipo_cambio$PA.NUS.FCRF,
+     type= "o",
+     col = "deeppink",
+     xlab="Año",
+     ylab = "Tipo de Cambio (MXN)",
+     main= "Evolución del Tipo de Cambio (MXN-USD)")
+
+#Cargar datos PIB
+gdp_mexico <- WDI(indicator = "NY.GDP.MKTP.CD",
+                  country = "MX",
+                  start = 1995,
+                  end=2023)
+View(gdp_mexico)
+plot(gdp_mexico$year, gdp_mexico$NY.GDP.MKTP.CD,
+     type= "o",
+     col = "green",
+     xlab="Año",
+     ylab = "PIB (USD)",
+     main= "Evolución del PIB de México (USD)")
+
+#Cargar datos de tasa de desempleo
+desempleo <-data <- WDI(indicator = "SL.UEM.TOTL.ZS", 
+                        country = "MX", 
+                        start = 1995, 
+                        end = 2023)
+
+View(desempleo)
+plot(desempleo$year, desempleo$SL.UEM.TOTL.ZS,
+     type= "o",
+     col = "red",
+     xlab="Año",
+     ylab = "Tasa de desempleo (%)",
+     main= "Evolución de la tasa de desempleo en México (%)")
+
+datos <- data.frame(tipo_cambio$PA.NUS.FCRF, gdp_mexico$NY.GDP.MKTP.CD, desempleo$SL.UEM.TOTL.ZS)
+View(datos)
+
+datos <- merge(tipo_cambio, gdp_mexico, by = "year")
+datos <- merge(datos, desempleo, by = "year")
+View(datos)
+
+mod_reg_multi <- lm(tipo_cambio$PA.NUS.FCRF ~ gdp_mexico$NY.GDP.MKTP.CD + desempleo$SL.UEM.TOTL.ZS, data=datos)
+
+summary(mod_reg_multi)
