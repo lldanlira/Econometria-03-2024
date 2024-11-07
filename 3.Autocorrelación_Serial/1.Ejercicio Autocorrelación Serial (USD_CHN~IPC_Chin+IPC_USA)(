@@ -1,0 +1,70 @@
+#Cargar paqueterias
+library('quantmod')
+library('tseries')
+install.packages("fImport")
+install.packages("lmtest")
+library('fImport')
+library('forecast')
+library('TSA')
+install.packages("lmtest")
+library('lmtest')
+#Integrando valores
+getSymbols("EXCHUS",src="FRED")
+plot(EXCHUS, type="l")
+getSymbols("UNRATE", src="FRED")
+getSymbols("CHNCPIALLMINMEI", src="FRED")
+getSymbols("CPIAUCSL", src="FRED")
+#Definiendo fechas
+USD_CHN=EXCHUS["2015-01::2022-12"]
+IPC_Chin=CHNCPIALLMINMEI["2015-01::2022-12"]
+IPC_USA=CPIAUCSL["2015-01::2022-12"]
+Paro_USA=UNRATE["2015-01::2022-12"]
+#Gráficando
+plot(USD_CHN,type="l")
+plot(IPC_Chin,type="l")
+plot(IPC_USA,type="l")
+plot(Paro_USA,type="l")
+#Definiendo Data Frame
+t_variables=data.frame(merge(USD_CHN,IPC_Chin,IPC_USA,Paro_USA))
+t_variables
+head(t_variables)
+#Definiendo modelo de regresión lineal
+Model_au <- lm(USD_CHN~IPC_Chin+IPC_USA,data=t_variables)
+#Resumen del modelo
+summary(Model_au)
+#Residuales
+res <- Model_au$residuals
+plot(Model_au)
+#Gráficas de residuos
+plot(res[,1], type="l")
+#Cargar paquetería lmtest
+library('lmtest')
+#Definiendo Hipótesis
+#H0: NO AUTOCORRELACIÓN
+#Ha: AUTOCORRELACIÓN
+
+# P value < 0.05 -- Existe Autocorrelación al menos de orden 1
+#Rechazamos la Hipótesis nula de NO AUTOCORRELACIÓN
+
+# P value > 0.05 -- No existe Autocorrelación
+#No rechazamos la hipótesis nula de NO AUTOCORRELACIÓN
+
+#Redefiniendo 
+help("as.ts")
+usd_chin <- as.ts(USD_CHN)
+ipc_china <- as.ts(IPC_Chin)
+ipc_usa <- as.ts(IPC_USA)
+Model_au_2 <- lm(usd_chin~ipc_china+ipc_usa)
+summary(Model_au_2)
+#Prueba de Durbin - Watson
+dwtest(Model_au_2)
+#Prueba de Breusch - Godfrey
+bgtest(Model_au_2)
+#Prueba L jung - Box
+Box.test(residuals(Model_au_2), type = "Ljung-Box")
+
+###
+acf()
+pacf
+acf(residuals(Model_au_2))
+pacf(residuals(Model_au_2))
