@@ -1,0 +1,32 @@
+#Instalando paqueteria
+install.packages("inegiR")
+library(inegiR)
+#Cargando TOKEN
+token <-"5d42a760-e923-42a7-8e68-d33ec1b0c63c"
+#Pegando Link
+url <-"https://www.inegi.org.mx/app/api/indicadores/desarrolladores/jsonxml/CL_INDICATOR/724014,724017,724023,724024,724025,783867/es/BIE/2.0/902b3680-7fa3-f347-be48-c59ca5710ca4?type=xml"
+download.file(url, "metadata.xml", method = "auto")
+#Listas de tus series con los IDs
+series <- list(
+  #Series de Cuentas Nacionales
+  RA = "724014",  #remuneraciones a los asalariados
+  ISPI = "724017", #impuesto sobre la producción de las importaciones
+  S = "724023", #subsidios
+  EBO = "724024", #excedente bruto de operación
+  PIB = "724025", #producto interno bruto
+  #Deflactor del PIB
+  P = "783867", #deflactor del PIB
+  #Series de Población ocupada
+  POT = "289272", #población ocupada total
+  POR = "289273", #población ocupada remunerada
+  POE = "289274", #población ocupada empleadora
+  POCP = "289275", #población ocupada por cuenta propia
+  PONR = "289276" #población ocupada no remunerada
+)
+#Para extraer datos de ese link 
+PIB <-inegi_series("724025", token)
+ISPI <-inegi_series("724017", token)
+View(PIB)  
+View(ISPI)
+MR <-lm(PIB$values~ISPI$values)
+|
