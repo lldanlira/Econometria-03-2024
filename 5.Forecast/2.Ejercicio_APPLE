@@ -1,0 +1,61 @@
+# Instalar y cargar el paquete quantmod
+install.packages("quantmod")
+library(quantmod)
+
+# Descargar datos de las acciones de Apple (AAPL)
+simbolo <- "AAPL"  # Ticker de Apple
+inicio <- "2020-01-01"  # Fecha de inicio de los datos
+fin <- Sys.Date()  # Fecha actual
+
+# Obtener los datos desde Yahoo Finance
+getSymbols(simbolo, src = "yahoo", from = inicio, to = fin, auto.assign = TRUE)
+
+# Mostrar los datos descargados
+head(AAPL)
+
+# Graficar los precios ajustados de cierre
+chartSeries(AAPL, subset = "last 6 months", theme = chartTheme("white"))
+
+# Instalar y cargar los paquetes necesarios
+install.packages("forecast")
+install.packages("tseries")
+library(forecast)
+library(tseries)
+
+# Extraer los precios ajustados de cierre
+precio_cierre <- Cl(AAPL)  # Precios de cierre ajustados (Adjusted Close)
+
+# Verificar y convertir a una serie temporal
+serie_ts <- ts(precio_cierre, frequency = 252)  # 252 días hábiles en un año
+
+# Graficar la serie temporal
+plot(serie_ts, main = "Precio de cierre ajustado de AAPL", xlab = "Tiempo", ylab = "Precio", col = "blue")
+
+# Obtener los índices basados en posiciones
+n_total <- length(serie_ts)  # Número total de datos
+n_entrenamiento <- round(0.8 * n_total)  # Por ejemplo, usar 80% para entrenamiento
+
+entrenamiento <- window(serie_ts, end = n_entrenamiento)
+prueba <- window(serie_ts, start = n_entrenamiento + 1)
+
+# Verificar las divisiones
+plot(entrenamiento, main = "Datos de entrenamiento", col = "blue")
+plot(prueba, main = "Datos de prueba", col = "red")
+
+
+# Ajustar un modelo ARIMA automáticamente
+modelo_arima <- auto.arima(entrenamiento)
+
+r# Resumen del modelo ARIMA
+summary(modelo_arima)
+
+# Pronosticar los próximos valores
+horizonte <- 30  # Número de días a pronosticar
+pronostico <- forecast(modelo_arima, h = horizonte)
+
+# Graficar el pronóstico
+plot(pronostico, main = "Pronóstico del precio de AAPL", xlab = "Tiempo", ylab = "Precio")
+lines(prueba, col = "red", lty = 2)  # Comparar con los datos reales de prueba
+
+# Evaluar el modelo (si tienes datos de prueba)
+accuracy(pronostico, prueba)
