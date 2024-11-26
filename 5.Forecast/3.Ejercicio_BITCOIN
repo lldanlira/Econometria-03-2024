@@ -1,0 +1,37 @@
+
+# Cargar la librería
+library(quantmod)
+
+# Definir el símbolo de Bitcoin en Yahoo Finance
+symbol <- "BTC-USD"
+
+# Establecer el rango de fechas deseado
+start_date <- "2024-11-01" # Cambiar por la fecha inicial deseada
+end_date <- Sys.Date()     # Fecha final, por defecto el día actual
+
+# Descargar los datos
+getSymbols(symbol, src = "yahoo", from = start_date, to = end_date)
+
+# Visualizar las primeras filas de los datos descargados
+head(get(symbol))
+
+# Si quieres graficar los precios de cierre ajustados
+chartSeries(get(symbol), theme = chartTheme("white"), type = "line",
+            name = "Bitcoin (BTC-USD)")
+# Cargar librerías
+library(quantmod)
+library(forecast)
+library(tseries)
+
+# Descargar los datos históricos de Bitcoin (BTC-USD)
+symbol <- "BTC-USD"
+start_date <- "2024-11-01" # Cambiar por la fecha deseada
+end_date <- Sys.Date()
+getSymbols(symbol, src = "yahoo", from = start_date, to = end_date)
+
+# Extraer precios de cierre ajustados
+btc_prices <- Cl(get(symbol))
+
+# Visualizar los datos
+plot(btc_prices, main = "Precio histórico de Bitcoin (BTC-USD)", 
+     ylab = "Precio en USD", xlab = "Fecha")
